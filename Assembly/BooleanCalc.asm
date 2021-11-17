@@ -1,11 +1,6 @@
-;**************************************************************************
-;* (C) Copyright 2012-2014 by Ryan Stone. All Rights Reserved.            *
-;*                                                                        *
-;**************************************************************************
+TITLE Boolean Calculator
 
-TITLE Boolean Calculator (BooleanCalc.asm)
-
-; Description: This program functions as a simple boolean 
+; This program functions as a simple boolean : Justin D
 
 INCLUDE Irvine32.inc
 
@@ -42,22 +37,22 @@ NumberOfEntries = ($ - caseTable) / EntrySize
 
 .code
 main PROC
-	call Clrscr				; clear console window
+	call Clrscr				; clears console window
 
 Menu:
-	mov edx, OFFSET msgMenu		; menu choices
-	call WriteString			; display menu
-	call Crlf				; go to next output line
+	mov edx, OFFSET msgMenu		; menus choice
+	call WriteString			
+	call Crlf				; next output line
 
 L1:	call ReadChar			; wait for input and return char
-	cmp al, '5'				; is selection valid (1-5)?
-	ja L1					; jump if above 5, go back
+	cmp al, '5'				
+	ja L1					; jump if above 5, goes back
 	cmp al, '1'
-	jb L1					; jump if below 1, go back
+	jb L1					; jump if below 1, goes back
 
 	call Crlf				
 	call ChooseProcedure		
-	jc quit				; jump if carry = 1, exit
+	jc quit				; jump if carry = 1, then exit
 
 	call Crlf
 	jmp Menu				; display menu again
@@ -67,22 +62,22 @@ main ENDP
 
 ChooseProcedure PROC
 
-	push ebx				; push EBX onto stack
-	push ecx				; push ECX onto stack
+	push ebx				
+	push ecx				
 
-	mov ebx, OFFSET caseTable	; pointer to the table
-	mov ecx, NumberOfEntries	; loop counter
+	mov ebx, OFFSET caseTable	
+	mov ecx, NumberOfEntries	; loop 
 
-L1:	cmp al, [ebx]			; match found?
+L1:	cmp al, [ebx]			
 	jne L2				; if no, continue
-	call NEAR PTR [ebx + 1]		; if yes, call procedure
+	call NEAR PTR [ebx + 1]		
 	jmp L3
 
 L2:	add ebx, EntrySize		; point to the next entry
-	loop L1				; repeat until ECX = 0
+	loop L1				
 
-L3:	pop ecx				; remove ECX from stack
-	pop ebx				; remove EBX from stack
+L3:	pop ecx				
+	pop ebx				
 
 	ret					; return from procedure
 
@@ -90,7 +85,7 @@ ChooseProcedure ENDP
 
 AND_op PROC
 
-	pushad				; push all registers onto stack
+	pushad				
 
 	mov edx, OFFSET msgAND		; name of the operation
 	call WriteString			; display message
@@ -99,14 +94,14 @@ AND_op PROC
 
 	mov edx, OFFSET msgInteger1	; ask for first integer
 	call WriteString
-	call ReadHex			; get hex integer
-	mov ebx, eax			; move first integer to EBX
+	call ReadHex			
+	mov ebx, eax			
 
 	mov edx, OFFSET msgInteger2	; ask for second integer
 	call WriteString
-	call ReadHex			; get second hex integer
+	call ReadHex			
 
-	and eax, ebx			; integer1 AND integer2
+	and eax, ebx			
 
 	mov edx, OFFSET msgResult	; result
 	call WriteString			; display result
@@ -123,14 +118,14 @@ OR_op PROC
 	pushad				; push all registers onto stack
 
 	mov edx, OFFSET msgOR		; name of the operation
-	call WriteString			; display message
+	call WriteString			
 	call Crlf
 	call Crlf
 
 	mov edx, OFFSET msgInteger1	; ask for first integer
 	call WriteString
 	call ReadHex			; get hexadecimal integer
-	mov ebx, eax			; move first integer to EBX
+	mov ebx, eax		
 
 	mov edx, OFFSET msgInteger2	; ask for second integer
 	call WriteString
@@ -138,12 +133,12 @@ OR_op PROC
 
 	or eax, ebx				; integer1 OR integer2
 
-	mov edx, OFFSET msgResult	; result of operation
+	mov edx, OFFSET msgResult	; resulting operation
 	call WriteString
-	call WriteHex			; display hex to window
+	call WriteHex			; display hex to the window
 	call Crlf
 
-	popad					; save and restore registers
+	popad					
 	ret					; return from procedure
 OR_op ENDP
 
@@ -160,51 +155,51 @@ NOT_op PROC
 	call WriteString
 	call ReadHex			; get hex integer
 
-	not eax				; NOT operand
+	not eax				
 
 	mov edx, OFFSET msgResult	; result of operation
 	call WriteString
-	call WriteHex			; EAX = result
+	call WriteHex			
 	call Crlf
 
-	popad					; restore registers
-	ret					; return from procedure
+	popad					
+	ret					
 
 NOT_op ENDP
 
 XOR_op PROC
 
-	pushad				; push all registers onto stack
+	pushad				
 
-	mov edx, OFFSET msgXOR		; name of the operation
-	call WriteString			; display message
+	mov edx, OFFSET msgXOR		
+	call WriteString			
 	call Crlf
 	call Crlf
 
-	mov edx, OFFSET msgInteger1	; ask for first operand
+	mov edx, OFFSET msgInteger1	
 	call WriteString
-	call ReadHex			; get hexadecimal integer
-	mov ebx, eax			; move first operand to EBX
+	call ReadHex			
+	mov ebx, eax			
 
-	mov edx, OFFSET msgInteger2	; ask for second operand
+	mov edx, OFFSET msgInteger2	
 	call WriteString
-	call ReadHex			; get hex integer
+	call ReadHex			
 
-	xor eax, ebx			; integer1 XOR integer2
+	xor eax, ebx			
 
-	mov edx, OFFSET msgResult	; result of operation
+	mov edx, OFFSET msgResult	
 	call WriteString
-	call WriteHex			; display hex to window
+	call WriteHex			
 	call Crlf
 
-	popad					; save and restore registers
-	ret					; return from procedure
+	popad					
+	ret					
 
 XOR_op ENDP
 
 ExitProgram PROC
 
-	stc					; set the carry flag to 1
+	stc					
 	ret					; return from procedure
 
 ExitProgram ENDP
